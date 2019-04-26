@@ -1,5 +1,5 @@
 name:                aeson-flatten
-version:             0.1.0.2
+version:             0.1.0.3
 synopsis:            JSON flatten for Aeson
 description:         Please see README.md
 homepage:            https://github.com/j1r1k/aeson-flatten#readme
