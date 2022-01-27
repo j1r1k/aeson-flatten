@@ -26,9 +26,9 @@ module Data.Aeson.Flatten
     , mergeTo
     ) where
 
-import Data.Aeson (Value(..))
+import Data.Aeson (Value(..), )
+import qualified Data.Aeson.KeyMap as KM
 import Data.Foldable (foldl')
-import qualified Data.HashMap.Strict as Map (elems, filter, union)
 
 -- |
 -- Predicate for testing whether provided 'Value' is a 'Object'.
@@ -40,7 +40,7 @@ isObject _ = False
 -- Merges keys from second 'Value' to first 'Value'.
 -- In case of name conflict, values from first are preserved.
 mergeTo :: Value -> Value -> Value
-mergeTo (Object o1) (Object o2) = Object $ Map.union o1 o2
+mergeTo (Object o1) (Object o2) = Object $ KM.union o1 o2
 mergeTo o _ = o
 
 -- |
@@ -48,6 +48,6 @@ mergeTo o _ = o
 flatten :: Value -> Value
 flatten (Array a)  = Array $ flatten <$> a
 flatten (Object o) = let flat = flatten <$> o
-                         rest = Map.filter (not . isObject) flat
-                      in foldl' mergeTo (Object rest) $ Map.elems flat
+                         rest = KM.filter (not . isObject) flat
+                      in foldl' mergeTo (Object rest) $ map snd $ KM.toList flat
 flatten v = v
